@@ -1,41 +1,35 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.stats import norm 
 
-import numpy as np
+def generate_poisson_process(lambda_, T):
+    # Generowanie czasów oczekiwania
+    interarrival_times = np.random.exponential(scale=1/lambda_, size=int(lambda_*T*2))
 
-def cauchy_sample(n):
-    # Generowanie par X, Y z rozkładu jednostajnego
-    X = np.random.uniform(size=n)
-    Y = np.random.uniform(size=n)
+    # Sumowanie czasów oczekiwania
+    times = np.cumsum(interarrival_times)
 
-    # Wyliczenie wartości gęstości f(x) = ch(x)
-    f = np.cosh
+    # Filtrowanie czasów, aby pozostały tylko te mniejsze niż T
+    times = times[times < T]
 
-    # Zwrócenie Z = Y/X
-    return Y / X
+    return times
 
-def normal_sample(n):
-    # Generowanie par X, Y z rozkładu jednostajnego
-    X = np.random.uniform(size=n)
-    Y = np.random.uniform(size=n)
+def plot_poisson_process(process, T):
+    plt.figure(figsize=(10, 5))
+    plt.step(process, range(len(process)), where='post', label='Proces Poissona')
+    plt.xlabel('Czas')
+    plt.ylabel('Liczba zdarzeń')
+    plt.title('Trajektoria procesu Poissona na odcinku [0, T]')
+    plt.xlim([0, T])
+    plt.ylim([0, max(len(process), 1)])
+    plt.legend()
+    plt.show()
 
-    # Wyliczenie wartości gęstości f(x) = ch(x)
-    f = np.cosh
+# Parametry
+lambda_ = 0.5  # Intensywność procesu Poissona
+T = 10  # Długość odcinka czasu
 
-    # Zwrócenie Z = Y/X
-    return Y / X
+# Generowanie trajektorii procesu Poissona
+process = generate_poisson_process(lambda_, T)
 
-# Przykład użycia
-cauchy_samples = cauchy_sample(1000)
-normal_samples = normal_sample(1000)
-# Wykres próbek
-xs = np.linspace(-5,5, 100)
-plt.hist(normal_samples, bins=50, density=True, alpha=0.5, color='b', label='Samples')
-plt.plot(xs, norm.pdf(xs, 0, 1), label="gęstość teoretyczna")
-plt.title('Histogram and Density')
-plt.xlabel('Value')
-plt.ylabel('Density')
-plt.legend()
-plt.show()
-# Wyświetlenie wyników
+# Rysowanie trajektorii
+plot_poisson_process(process, T)
