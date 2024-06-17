@@ -47,12 +47,12 @@ def GEN(N):
     samples = np.ceil(us/(1-us))
     return samples
 
-sample = GEN(10**4)
+sample = GEN(10**2)
 
-xs = np.linspace(0,50,1000)
 plt.figure(figsize=(15,9))
-plt.plot(xs, pmf(xs))
-sns.histplot(sample, discrete=True, bins=10000)
+sns.histplot(sample, discrete=True, stat="probability",bins=10000)
+xs = np.linspace(1,50,50)
+plt.scatter(xs, pmf(xs),c="red")
 ax = plt.gca()
 ax.set_xlim([0, 50])
 plt.show()
