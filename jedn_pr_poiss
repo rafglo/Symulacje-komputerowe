@@ -5,3 +5,12 @@ def poisson_process(rate, time_duration):
     for i in range(num_events):
         N_t.update({event_times[i]:i+1})
     return num_events, event_times, N_t
+
+def poisson_process2(rate, T):
+    t = 0
+    S_i = []
+    while t < T:
+        u = np.random.rand()
+        S_i.append(t)
+        t -= 1/rate * np.log(u)
+    return S_i
