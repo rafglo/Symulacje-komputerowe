@@ -26,19 +26,21 @@ def ESTRISK(u, c, lambd, mu, T, M):
 def FUN(R, dt, N):
     times = np.zeros(N)
     i = 0
+    t2 = 0
     while i < N:
         x = 0
         y = 0
-        t = 0
+        t = t2
         while x**2 + y**2 <= R**2:
             x += np.random.normal(0, 1) * np.sqrt(dt)
             y += np.random.normal(0, 1) * np.sqrt(dt)
             t += dt
+            t2 = t
         if y > 0:
-            
             continue
         else:
             times[i] = t
+            t2 = 0
             i += 1
     return np.sum(times) / N
 
