@@ -1,0 +1,29 @@
+def poisson_process(rate, time_duration):
+    num_events = np.random.poisson(rate * time_duration)
+    event_times = np.cumsum(np.random.exponential(1/rate, num_events))
+    N_t = {}
+    for i in range(num_events):
+        N_t.update({event_times[i]:i+1})
+    return num_events, event_times, N_t
+
+def proces_ruiny(eta, u, c, T, lambda_):
+    num_events, event_times, N_T = poisson_process(lambda_, T)
+    etas = np.random.exponential(eta, num_events)
+    etas_cumsum = np.cumsum(etas)
+    R = u + c*event_times - etas_cumsum
+    try:
+        if np.min(R) < 0:
+            return 1
+        else:
+            return 0
+    except:
+        pass
+
+def pollaczeck_khinchine(u, c, eta, lambd):
+    return eta*lambd/c*np.exp(-(1/eta - lambd/c)*u)
+
+def ruin_prob_estim(eta, u, c, T, lambd, mc):
+    if_ruin = np.zeros(mc)
+    for i in range(mc):
+        if_ruin[i] = proces_ruiny(eta, u, c, T, lambd)
+    return sum(if_ruin)/len(if_ruin)
