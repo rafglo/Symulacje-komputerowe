@@ -41,3 +41,8 @@ def FUN(R, dt, N):
             times[i] = t
             i += 1
     return np.sum(times) / N
+
+def GEN(N):
+    us = np.random.rand(N)
+    samples = np.ceil(us/(1-us))
+    return samples
