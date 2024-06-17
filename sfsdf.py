@@ -46,3 +46,13 @@ def GEN(N):
     us = np.random.rand(N)
     samples = np.ceil(us/(1-us))
     return samples
+
+sample = GEN(10**4)
+
+xs = np.linspace(0,50,1000)
+plt.figure(figsize=(15,9))
+plt.plot(xs, pmf(xs))
+sns.histplot(sample, discrete=True, bins=10000)
+ax = plt.gca()
+ax.set_xlim([0, 50])
+plt.show()
